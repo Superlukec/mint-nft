@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@metaplex-foundation/js": "^0.18.3",
+    "@irys/sdk": "^0.1.22",
+    "@metaplex-foundation/js": "^0.20.1",
     "@solana/web3.js": "^1.91.7",
     "@types/bs58": "^4.0.4",
     "bs58": "^5.0.0",

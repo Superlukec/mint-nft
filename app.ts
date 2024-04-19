@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { Metaplex, keypairIdentity, bundlrStorage, toMetaplexFile, toBigNumber } from "@metaplex-foundation/js";
+import Irys from "@irys/sdk";
 import * as fs from 'fs';
 import base58 from "bs58";
 
