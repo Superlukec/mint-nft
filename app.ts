@@ -114,24 +114,18 @@ async function mintNft(metadataUri: string, name: string, sellerFee: number, sym
 }
 
 async function main() {
-
-
-    NFT_IMAGES.forEach(async (image) => {
-
+    for (const image of NFT_IMAGES) {
         console.log(`Minting ${image.imgName} to an NFT in Wallet ${WALLET.publicKey.toBase58()}`);
         // Step 1 - Upload Image
         const imgUri = await uploadImage(CONFIG.uploadPath, image.imgFileName);
         // Step 2 - Upload Metadata
         const metadataUri = await uploadMetadata(imgUri, image.imgType, image.imgName, image.description, image.attributes);
         // Step 3 - Mint NFT
-        mintNft(metadataUri, image.imgName, image.sellerFeeBasisPoints, image.symbol, image.creators);
+        await mintNft(metadataUri, image.imgName, image.sellerFeeBasisPoints, image.symbol, image.creators);
 
         // set timeout to avoid rate limit
         await new Promise(resolve => setTimeout(resolve, 5000));
-
-    });
-
-
+    }
 }
 
 main();
