@@ -16,5 +16,9 @@
     "@types/bs58": "^4.0.4",
     "bs58": "^5.0.0",
     "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   }
 }

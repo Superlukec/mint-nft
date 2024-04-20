@@ -1,19 +1,24 @@
 import 'dotenv/config'
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
-import { Metaplex, keypairIdentity, bundlrStorage, toMetaplexFile, toBigNumber } from "@metaplex-foundation/js";
-import Irys from "@irys/sdk";
+import { Metaplex, keypairIdentity, toMetaplexFile, toBigNumber, irysStorage } from "@metaplex-foundation/js";
 import * as fs from 'fs';
 import base58 from "bs58";
 
+
+console.log(`Starting NFT Minting Process`);
+console.log(`RPC Node: ${process.env.RPC_NODE}`);
+console.log(`Wallet: ${process.env.WALLET}`);
+
 const QUICKNODE_RPC = process.env.RPC_NODE!;
 const SOLANA_CONNECTION = new Connection(QUICKNODE_RPC);
+
 const WALLET = Keypair.fromSecretKey(base58.decode(process.env.WALLET as any));
 const METAPLEX = Metaplex.make(SOLANA_CONNECTION)
     .use(keypairIdentity(WALLET))
-    .use(bundlrStorage({
-        address: 'https://devnet.bundlr.network',
+    .use(irysStorage({
+        address: 'https://devnet.irys.xyz',
         providerUrl: QUICKNODE_RPC,
-        timeout: 60000,
+        timeout: 120000,
     }));
 
 const CONFIG = {
@@ -68,6 +73,7 @@ const NFT_IMAGES = [
 
 async function uploadImage(filePath: string, fileName: string): Promise<string> {
     console.log(`Step 1 - Uploading Image`);
+
     const imgBuffer = fs.readFileSync(filePath + fileName);
     const imgMetaplexFile = toMetaplexFile(imgBuffer, fileName);
     const imgUri = await METAPLEX.storage().upload(imgMetaplexFile);
@@ -115,8 +121,10 @@ async function mintNft(metadataUri: string, name: string, sellerFee: number, sym
 }
 
 async function main() {
+
     for (const image of NFT_IMAGES) {
         console.log(`Minting ${image.imgName} to an NFT in Wallet ${WALLET.publicKey.toBase58()}`);
+
         // Step 1 - Upload Image
         const imgUri = await uploadImage(CONFIG.uploadPath, image.imgFileName);
         // Step 2 - Upload Metadata
